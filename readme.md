@@ -24,9 +24,9 @@ The name is intentional: **ReClaim** means to re-validate claims, and to reclaim
 
 ## Demo
 
-https://github.com/arcsphere/reclaim/outputs/RECLAIM_demo1.mp4
+https://github.com/arcsphere/reclaim/tree/main/outputsRECLAIM_demo1.mp4
 
-https://github.com/arcsphere/reclaim/outputs/RECLAIM_demo2.mov
+https://github.com/arcsphere/reclaim/tree/main/outputs/RECLAIM_demo2.mov
 
 ![Console](outputs/Reclaim_console_output.png)
 ![Micro-Questions](outputs/Reclaim_microquestions1.png)
