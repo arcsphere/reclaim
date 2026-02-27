@@ -21,6 +21,21 @@ The name is intentional: **ReClaim** means to re-validate claims, and to reclaim
 
 ---
 
+
+## Demo
+
+https://github.com/arcsphere/reclaim/assets/main/outputs/RECLAIM_demo1.mp4
+
+https://github.com/arcsphere/reclaim/assets/main/outputs/RECLAIM_demo2.mov
+
+![Console](outputs/Reclaim_console_output.png)
+![Micro-Questions](outputs/Reclaim_microquestions1.png)
+![Coherence](outputs/Reclaim_CoherenceScore1.png) 
+![Coherence](outputs/Reclaim_coherence_score2.png)
+
+---
+
+
 ## Why This Exists
 
 Most AI tools will confidently summarize a research paper. ReClaim asks a harder question: *can AI actually verify what the paper says?*
