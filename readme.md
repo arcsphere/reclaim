@@ -3,7 +3,7 @@
 
 > *Can AI independently verify the claims in a research paper? ReClaim finds out.*
 
-**Author:** Arjun Shrivatsan  
+**Author:** Arjun Shrivatsan  | Innovations Technologist | Reach out to me and lets chat! 
 
 ---
 
