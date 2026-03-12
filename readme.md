@@ -128,7 +128,7 @@ Edit `~/.gemini/settings.json`:
 
 ```bash
 # 1. Clone
-git clone https://github.com/arjunshrivatsan/reclaim
+git clone https://github.com/arcsphere/reclaim
 cd reclaim
 
 # 2. Install dependencies
