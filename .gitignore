@@ -20,4 +20,28 @@ Thumbs.db
 
 # Uploads
 uploads/
-*.pdf
+*.pdfoutputs/
+
+# local/dev-only folders
+workingenv/
+temp/
+screenrecordings/
+Screen Recordings/
+
+# generated recordings / large media
+*.mov
+*.mp4
+*.mkv
+*.avi
+
+# local-only / generated
+workingenv/
+temp/
+ScreenRecordings/
+screenrecordings/
+Screen Recordings/
+*.mov
+*.mp4
+*.mkv
+*.avi
+*.zip

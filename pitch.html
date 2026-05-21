@@ -1,0 +1,329 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
+.deck{width:100%;background:#000;color:#fff;min-height:100vh;overflow:hidden;position:relative}
+.slide{width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 100px;opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease;position:absolute;top:0;left:0;pointer-events:none}
+.slide.active{opacity:1;transform:translateY(0);pointer-events:all;position:relative}
+.slide.exit{opacity:0;transform:translateY(-40px);position:absolute}
+
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#888;margin-bottom:24px}
+.h1{font-size:clamp(48px,7vw,96px);font-weight:700;line-height:1.0;letter-spacing:-0.03em;margin-bottom:32px}
+.h2{font-size:clamp(32px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-0.02em;margin-bottom:24px}
+.body{font-size:18px;line-height:1.65;color:#aaa;max-width:640px}
+.body strong{color:#fff;font-weight:500}
+
+.accent{color:#3b82f6}
+.dim{color:#444}
+
+.pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.pill{padding:10px 20px;border-radius:100px;font-size:14px;font-weight:500;letter-spacing:0.01em}
+.pill-no{background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
+.pill-yes{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)}
+
+.comp-table{width:100%;border-collapse:collapse;margin-top:32px;font-size:14px}
+.comp-table th{text-align:left;padding:14px 16px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#555;border-bottom:1px solid #222;font-weight:500}
+.comp-table td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.04);color:#888;vertical-align:top}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table .tool-name{color:#fff;font-weight:600;font-size:15px;white-space:nowrap}
+.comp-table .highlight-row{background:rgba(59,130,246,0.06);border-left:3px solid #3b82f6}
+.comp-table .highlight-row td{color:#aaa}
+.comp-table .highlight-row .tool-name{color:#60a5fa}
+.check{color:#3b82f6}
+.cross{color:#444}
+.partial{color:#f59e0b}
+
+.contact-block{margin-top:40px}
+.contact-row{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.contact-label{font-size:13px;color:#555;width:80px;flex-shrink:0}
+.contact-value{font-size:16px;color:#aaa}
+.contact-value a{color:#60a5fa;text-decoration:none}
+
+.qr-area{display:flex;align-items:flex-start;gap:48px;margin-top:48px}
+.qr-box{background:#fff;border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:center}
+.qr-box img{width:120px;height:120px;display:block}
+.qr-label{font-size:13px;color:#555;margin-top:10px;text-align:center}
+
+.github-tag{display:inline-flex;align-items:center;gap:8px;background:#111;border:1px solid #333;border-radius:8px;padding:10px 16px;font-size:14px;color:#888;margin-top:24px}
+.github-tag .repo{color:#60a5fa;font-family:monospace}
+
+.progress{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100}
+.dot{width:6px;height:6px;border-radius:50%;background:#333;transition:background 0.3s,transform 0.3s;cursor:pointer}
+.dot.active{background:#fff;transform:scale(1.3)}
+
+.nav{position:fixed;bottom:40px;right:60px;display:flex;gap:12px;z-index:100}
+.nav-btn{width:40px;height:40px;border-radius:50%;background:#111;border:1px solid #333;color:#888;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.nav-btn:hover{background:#222;color:#fff}
+
+.slide-num{position:fixed;top:40px;right:60px;font-size:12px;color:#444;letter-spacing:0.08em;z-index:100}
+
+.divider{width:40px;height:2px;background:#3b82f6;margin-bottom:32px}
+
+.gap-callout{margin-top:40px;padding:24px 28px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:12px;max-width:700px}
+.gap-callout .gap-title{font-size:16px;font-weight:600;color:#60a5fa;margin-bottom:8px}
+.gap-callout .gap-body{font-size:14px;color:#888;line-height:1.6}
+
+.source-strip{margin-top:32px;padding-top:20px;border-top:1px solid #1a1a1a;font-size:11px;color:#333;letter-spacing:0.02em;max-width:700px;line-height:1.6}
+
+/* Screenshots slide */
+.screenshots-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px;width:100%}
+.screenshot-frame{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease}
+.screenshot-frame:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(59,130,246,0.1)}
+.screenshot-frame .browser-bar{height:28px;background:#111;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;padding:0 12px;gap:6px}
+.screenshot-frame .bd{width:8px;height:8px;border-radius:50%}
+.screenshot-frame .bd.r{background:#f87171}
+.screenshot-frame .bd.y{background:#fbbf24}
+.screenshot-frame .bd.g{background:#34d399}
+.screenshot-frame .screenshot-img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#080808}
+.screenshot-label{font-size:12px;color:#444;letter-spacing:0.06em;text-transform:uppercase;padding:12px 16px;text-align:center}
+</style>
+
+<div class="deck" id="deck">
+
+<!-- SLIDE 0: Title -->
+<div class="slide active" id="slide-0">
+  <div class="eyebrow">Research Validation &middot; March 2026</div>
+  <div class="h1">ReClaim</div>
+  <div class="divider"></div>
+  <div class="body">
+    <strong>AI Science Validation.</strong> Research Inquiry. Claim Comparison.<br><br>
+    The first tool that asks AI to verify what it claims to know &mdash; and tells you honestly when it can't.
+  </div>
+  <div class="github-tag">
+    <span>Open source</span>
+    <span class="repo">arcsphere/reclaim</span>
+  </div>
+</div>
+
+<!-- SLIDE 1: Problem -->
+<div class="slide" id="slide-1">
+  <div class="eyebrow">Why this matters</div>
+  <div class="h2">AI confidently answers.<br>Nobody checks.</div>
+  <div class="divider"></div>
+  <div class="body">
+    Every AI tool generates plausible-sounding answers about research.<br><br>
+    <strong>ReClaim is built on one finding:</strong> across 19 experimental runs, AI claimed to answer 58% of micro-questions about a research paper. It actually answered <strong style="color:#3b82f6">35%</strong>.<br><br>
+    The gap between what AI claims and what it verifies is the problem ReClaim solves.
+  </div>
+</div>
+
+<!-- SLIDE 2: What it is not -->
+<div class="slide" id="slide-2">
+  <div class="eyebrow">What this is not</div>
+  <div class="h2">Not a summariser.<br>Not a chatbot.</div>
+  <div class="divider"></div>
+  <div class="pills">
+    <span class="pill pill-no">Not a PDF chat tool</span>
+    <span class="pill pill-no">Not a summariser</span>
+    <span class="pill pill-no">Not a RAG pipeline</span>
+    <span class="pill pill-no">Not a hallucination detector</span>
+  </div>
+  <div style="margin-top:32px" class="body">
+    ReClaim uses <strong>900+ live scientific tools</strong> &mdash; PubMed, ArXiv, Semantic Scholar &mdash; to independently verify claims.<br><br>
+    It explicitly flags what AI <strong>cannot</strong> verify. Honesty about limitations is a feature, not a bug.
+  </div>
+  <div class="pills" style="margin-top:16px">
+    <span class="pill pill-yes">Live tool verification</span>
+    <span class="pill pill-yes">Honest unverifiable flags</span>
+    <span class="pill pill-yes">Source vs target comparison</span>
+  </div>
+</div>
+
+<!-- SLIDE 3: Screenshots -->
+<div class="slide" id="slide-3">
+  <div class="eyebrow">Product &middot; In action</div>
+  <div class="h2">See it work.</div>
+  <div class="divider"></div>
+
+  <div class="screenshots-grid">
+    <div class="screenshot-frame">
+      <div class="browser-bar"><div class="bd r"></div><div class="bd y"></div><div class="bd g"></div></div>
+      <img class="screenshot-img" src="image1.png" alt="ReClaim screenshot 1">
+      <div class="screenshot-label">Claim decomposition</div>
+    </div>
+    <div class="screenshot-frame">
+      <div class="browser-bar"><div class="bd r"></div><div class="bd y"></div><div class="bd g"></div></div>
+      <img class="screenshot-img" src="image2.png" alt="ReClaim screenshot 2">
+      <div class="screenshot-label">Live verification</div>
+    </div>
+    <div class="screenshot-frame">
+      <div class="browser-bar"><div class="bd r"></div><div class="bd y"></div><div class="bd g"></div></div>
+      <img class="screenshot-img" src="image3.png" alt="ReClaim screenshot 3">
+      <div class="screenshot-label">Gap analysis</div>
+    </div>
+    <div class="screenshot-frame">
+      <div class="browser-bar"><div class="bd r"></div><div class="bd y"></div><div class="bd g"></div></div>
+      <img class="screenshot-img" src="image4.png" alt="ReClaim screenshot 4">
+      <div class="screenshot-label">Unverifiable flagging</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: Competitive Landscape -->
+<div class="slide" id="slide-4">
+  <div class="eyebrow">Competitive landscape &middot; Web-backed research</div>
+  <div class="h2">Tools exist.<br><span style="color:#3b82f6">This approach doesn't.</span></div>
+  <div class="divider"></div>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>What it does</th>
+        <th>Live source<br>verification</th>
+        <th>AI self-audit<br>(claim vs actual)</th>
+        <th>Unverifiable<br>flagging</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tool-name">Scite.ai</td>
+        <td>Classifies 1.6B+ citations as supporting/contrasting across 280M sources</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+      </tr>
+      <tr>
+        <td class="tool-name">Elicit</td>
+        <td>Semantic paper search with data extraction and sentence-level citations</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+      </tr>
+      <tr>
+        <td class="tool-name">SemanticCite</td>
+        <td>Verifies citation accuracy via full-text analysis with 4-class classification</td>
+        <td><span class="partial">&#9684;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="partial">&#9684;</span></td>
+      </tr>
+      <tr>
+        <td class="tool-name">GPTZero Sources</td>
+        <td>Detects claims in text and finds supporting/contradicting web sources</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+      </tr>
+      <tr>
+        <td class="tool-name">Opscidia Science Checker</td>
+        <td>Checks health claims against 3M PubMed OA articles for support/rejection</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+      </tr>
+      <tr>
+        <td class="tool-name">Anara</td>
+        <td>Research assistant with upload-and-ask, annotations, and lit reviews</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+      </tr>
+      <tr class="highlight-row">
+        <td class="tool-name">ReClaim</td>
+        <td>Decomposes AI output into micro-claims, verifies each against 900+ live tools, and reports the gap between claimed and verified</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="check">&#10003;</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="gap-callout">
+    <div class="gap-title">The gap no one is filling</div>
+    <div class="gap-body">
+      Every tool above verifies <em>human-written</em> claims against sources. None of them turn AI's own output into the object of scrutiny &mdash; decomposing what the model <em>claimed</em> it knew, testing each micro-claim against live databases, and quantifying the delta between confidence and reality. ReClaim is the first tool that audits AI as the subject, not the engine.
+    </div>
+  </div>
+
+  <div class="source-strip">
+    Sources: scite.ai &middot; elicit.com &middot; arxiv.org/html/2511.16198v1 (SemanticCite) &middot; gptzero.me/sources &middot; zbw-mediatalk.eu (Opscidia / Science Checker) &middot; anara.com &mdash; all accessed March 2026
+  </div>
+</div>
+
+<!-- SLIDE 5: Contact -->
+<div class="slide" id="slide-5">
+  <div class="eyebrow">Contact &middot; Early access</div>
+  <div class="h2">Built for researchers<br>who need the truth.</div>
+  <div class="divider"></div>
+  <div class="qr-area">
+    <div>
+      <div class="contact-block">
+        <div class="contact-row">
+          <div class="contact-label">Author</div>
+          <div class="contact-value">Arjun Shrivatsan</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-label">Email</div>
+          <div class="contact-value"><a href="mailto:gurumurthy.ar@northeastern.edu">gurumurthy.ar@northeastern.edu</a></div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-value"><a href="https://linkedin.com/in/arjunshrivatsan">linkedin.com/in/arjunshrivatsan</a></div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-label">Repo</div>
+          <div class="contact-value"><a href="https://github.com/arcsphere/reclaim">github.com/arcsphere/reclaim</a></div>
+        </div>
+      </div>
+      <div class="github-tag" style="margin-top:32px">
+        MIT License &middot; Open Source &middot; Early beta access available
+      </div>
+    </div>
+    <div style="flex-shrink:0">
+      <div class="qr-box">
+        <img src="signupqr.png" alt="Scan to join beta">
+      </div>
+      <div class="qr-label" style="color:#555;font-size:12px;margin-top:8px">Scan to join beta</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="progress" id="progress">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" onclick="prev()">&#8592;</button>
+  <button class="nav-btn" onclick="next()">&#8594;</button>
+</div>
+
+<div class="slide-num" id="slideNum">1 / 6</div>
+
+<script>
+let cur = 0;
+const total = 6;
+let timer = null;
+
+function goTo(n) {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit');
+  setTimeout(function(){ slides[cur < n ? cur : n].classList.remove('exit'); }, 800);
+  cur = n;
+  slides[cur].classList.add('active');
+  dots.forEach(function(d,i){ d.classList.toggle('active', i === cur); });
+  document.getElementById('slideNum').textContent = (cur+1) + ' / ' + total;
+}
+
+function next() { goTo((cur+1) % total); resetTimer(); }
+function prev() { goTo((cur-1+total) % total); resetTimer(); }
+
+function resetTimer() {
+  if(timer) clearInterval(timer);
+  timer = setInterval(function(){ next(); }, 8000);
+}
+
+document.addEventListener('keydown', function(e) {
+  if(e.key === 'ArrowRight' || e.key === ' ') { next(); }
+  if(e.key === 'ArrowLeft') { prev(); }
+});
+
+resetTimer();
+</script>
