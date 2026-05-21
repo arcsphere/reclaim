@@ -45,3 +45,20 @@ Screen Recordings/
 *.mkv
 *.avi
 *.zip
+
+# local/generated
+outputs/
+workingenv/
+temp/
+ScreenRecordings/
+screenrecordings/
+Screen Recordings/
+*.mov
+*.mp4
+*.mkv
+*.avi
+*.zip
+
+# macOS metadata
+._*
+.DS_Store
